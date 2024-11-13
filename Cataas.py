@@ -4,7 +4,7 @@ import requests
 from io import BytesIO
 
 
-def load_image():
+def load_image(url):
     try:
         # Делаем запрос и получаем ответ в response
         response = requests.get(url)
@@ -22,6 +22,16 @@ def load_image():
         return None
 
 
+def next_cat():
+    img = load_image(url)
+    # проверяем, что там есть картинка
+    if img:
+        # Присваиваем эту картинку на метку
+        label.config(image=img)
+        # обязательный параметр, чтобы сборщик мусора не убрал её с метки
+        label.image = img
+
+
 window = Tk()
 #Заголовок окна
 window.title("Cats!")
@@ -30,15 +40,11 @@ window.geometry("600x480")
 #Задаем метку на которой выводится изображение
 label = Label()
 label.pack()
+update_button = Button(text = "Следующий котик", command = next_cat)
+update_button.pack()
 #Адрес по которому будем искать картинки
 url = "https://cataas.com/cat"
-# Переменная для получения картинки из функции и установки её на метку
-img = load_image(url)
-#проверяем, что там есть картинка
-if img:
-    # Присваиваем эту картинку на метку
-    label.config(image=img)
-    #обязательный параметр, чтобы сборщик мусора не убрал её с метки
-    label.image = img
 
+
+next_cat()
 window.mainloop()
